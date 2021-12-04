@@ -1,0 +1,6 @@
+pip-tools
+jupyterlab
+flake8
+requests
+pandas
+numpy
