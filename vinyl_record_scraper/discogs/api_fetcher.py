@@ -1,9 +1,11 @@
-import yaml
-import requests
 import json
 import time
 
+import requests
+import yaml
+
 from discogs.api_config import base_url, discogs_endpoints
+
 
 def retrieve_discogs_credentials(path_to_credentials_file: str) -> dict:
     with open(path_to_credentials_file, "r") as creds:
@@ -11,20 +13,22 @@ def retrieve_discogs_credentials(path_to_credentials_file: str) -> dict:
             file_values = yaml.safe_load(creds)
             credentials = file_values['discogs-api']
         except yaml.YAMLError as exc:
-            raise(exc)
+            raise (exc)
         return credentials
+
 
 class DiscogsAPIFetcher:
     """
     Class to perform requests to the discogs HTTPS endpoint
     """
+
     def __init__(self, path_to_credentials_file):
         self.credentials = retrieve_discogs_credentials(path_to_credentials_file=path_to_credentials_file)
         self.base_url = base_url
         self.endpoints = discogs_endpoints
 
     def _implement_rate_limiting(self, response_headers: dict):
-        if int(response_headers['X-Discogs-Ratelimit-Remaining']) <= 10:
+        if int(response_headers['x-discogs-ratelimit-remaining']) <= 10:
             time.sleep(60)
         pass
 
@@ -34,6 +38,14 @@ class DiscogsAPIFetcher:
         response = requests.get(url=request_url, params=request_params)
         self._implement_rate_limiting(response_headers=response.headers)
         return response
+
+    def retrieve_release(self, request_params: dict, endpoint_name="release"):
+        response = self._make_request(endpoint_name=endpoint_name, request_params=request_params)
+        if response.ok:
+            response_json = json.loads(response.text)
+        else:
+            raise ValueError('API request failed with: %s' % response.text)
+        return response_json
 
     def retrieve_collection(self, endpoint_name: str, request_params: dict):
         accumulated_items = []
@@ -45,7 +57,7 @@ class DiscogsAPIFetcher:
             if response.ok:
                 response_json = json.loads(response.text)
             else:
-                raise ValueError('API request failed with: %s'%response.text)
+                raise ValueError('API request failed with: %s' % response.text)
             accumulated_items.extend(response_json['releases'])
             if response_json['pagination']['pages'] == page_number:
                 all_items_pulled = True

@@ -1,5 +1,7 @@
 import json
+
 from discogs.api_fetcher import DiscogsAPIFetcher
+
 
 def scrape_record_collection(username: str, folder_id: int, file_name: str, sort_key="artist"):
     """
@@ -17,7 +19,6 @@ def scrape_record_collection(username: str, folder_id: int, file_name: str, sort
     - rating
     - added
     - year
-    :return:
     """
     collection_request_params = {
         "username": username,
@@ -27,8 +28,9 @@ def scrape_record_collection(username: str, folder_id: int, file_name: str, sort
     fetcher = DiscogsAPIFetcher(path_to_credentials_file='config/credentials.yaml')
     collection = fetcher.retrieve_collection(endpoint_name="collection_releases",
                                              request_params=collection_request_params)
-    with open('../data/'+ file_name+ '.json', 'w') as f:
+    with open(f'../data/{file_name}.json', 'w') as f:
         json.dump(collection, f)
 
+
 if __name__ == "__main__":
-    scrape_record_collection(username="alain.v2", folder_id=0, file_name="collections/raw/alain.v2")
+    scrape_record_collection(username="le_yems", folder_id=0, file_name="collections/raw/le_yems")
