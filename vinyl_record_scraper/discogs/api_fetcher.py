@@ -28,7 +28,7 @@ class DiscogsAPIFetcher:
         self.endpoints = discogs_endpoints
 
     def _implement_rate_limiting(self, response_headers: dict):
-        if int(response_headers['X-Discogs-Ratelimit-Remaining']) <= 10:
+        if int(response_headers['x-discogs-ratelimit-remaining']) <= 10:
             time.sleep(60)
         pass
 
