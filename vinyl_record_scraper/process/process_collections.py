@@ -66,8 +66,8 @@ def transform_raw_files_to_flat_table(path_to_raw_files_dir: str):
 
 if __name__ == "__main__":
     df = transform_raw_files_to_flat_table(
-        path_to_raw_files_dir='../data/collections/raw/'
+        path_to_raw_files_dir='../../data/collections/raw/'
     )
     df.to_csv(
-        path_or_buf='../data/collections/flat/collections.csv', index=False
+        path_or_buf='../../data/collections/flat/collections.csv', index=False
     )
