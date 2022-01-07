@@ -35,6 +35,14 @@ class DiscogsAPIFetcher:
         self._implement_rate_limiting(response_headers=response.headers)
         return response
 
+    def retrieve_release(self, request_params: dict, endpoint_name="release"):
+        response = self._make_request(endpoint_name=endpoint_name, request_params=request_params)
+        if response.ok:
+            response_json = json.loads(response.text)
+        else:
+            raise ValueError('API request failed with: %s' % response.text)
+        return response_json
+
     def retrieve_collection(self, endpoint_name: str, request_params: dict):
         accumulated_items = []
         page_number = 1
