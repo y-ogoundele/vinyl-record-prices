@@ -5,3 +5,7 @@ requests
 pandas
 numpy
 pyyaml
+matplotlib
+seaborn
+statsmodels
+scikit-learn
