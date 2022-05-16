@@ -11,3 +11,5 @@ matplotlib
 seaborn
 statsmodels
 scikit-learn
+pillow>=9.0.1
+ipython>=7.31.1
